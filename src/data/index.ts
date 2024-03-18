@@ -86,3 +86,16 @@ export const defaultFromInputs: { [key: string]: string } = {
   gain9: "",
   gain10: "",
 };
+
+export const gainColors = [
+  "bg-green-100",
+  "bg-green-200",
+  "bg-green-300",
+  "bg-green-400",
+  "bg-green-500",
+  "bg-green-600",
+  "bg-green-700",
+  "bg-green-800",
+  "bg-green-900",
+  "bg-green-950", // Handle the 10th element case
+];
