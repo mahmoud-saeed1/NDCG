@@ -21,9 +21,17 @@ export function sortByGain(
   });
 }
 
+// export function reRank(
+//   input: { gain: number; rank: number }[]
+// ): { gain: number; rank: number }[] {
+//   const newRanked = sortByGain(input).map((item, index) => item.rank = (index + 1));
+
+//   return newRanked;
+// }
+
 export function getNdcg(gain: number, rank: number): number {
   if (Math.log(rank) !== 0) {
-    return parseFloat((gain / Math.log(rank)).toFixed(2));
+    return parseFloat((gain / Math.log2(rank)).toFixed(2));
   } else {
     const test = gain / rank;
     return test; // Convert rank to string for consistent output
