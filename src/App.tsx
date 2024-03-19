@@ -7,7 +7,12 @@ import Input from "./ui/Input";
 // import { InputValidator } from "./validation";
 import ErrorMessage from "./components/ErrorMessage";
 import Table from "./ui/Table";
-import { convertToRankedObject, getTotalNDCG, sortByGain } from "./utils";
+import {
+  convertToRankedObject,
+  getTotalNDCG,
+  sortByGain,
+  sortByGainMaintainRank,
+} from "./utils";
 
 function App() {
   /*~~~~~~~~$ States $~~~~~~~~*/
@@ -86,18 +91,16 @@ function App() {
 
   return (
     <Fragment>
-      <main>
+      <main className="px-5 lg:px-12 xl:px-24">
         {/*~~~~~~~~$ Get Start $~~~~~~~~*/}
         <div>
-          <Button
-            title={`${!showTable ? "get start" : "edit"}`}
-            className={`${
-              !showTable
-                ? "bg-gradient-to-r from-purple-600 to-blue-600"
-                : "bg-gradient-to-r from-green-400 to-green-800"
-            } `}
-            onClick={openModal}
-          />
+          {!showTable && (
+            <Button
+              title="get start"
+              className="bg-gradient-to-r from-purple-600 to-blue-600"
+              onClick={openModal}
+            />
+          )}
         </div>
 
         {/*~~~~~~~~$ Input Modal $~~~~~~~~*/}
@@ -109,8 +112,8 @@ function App() {
           <form onSubmit={onSubmitHandler}>
             {formInputsRender}
 
-            <p className="text-sm text-red-500">
-              *Not: gain "rate" must be between 0 and 10 !
+            <p className="text-sm text-red-500 mt-3">
+              *Note: gain "rate" must be between 0 and 10 !
             </p>
 
             {/*~~~~~~~~$ modal buttons $~~~~~~~~*/}
@@ -118,7 +121,7 @@ function App() {
               <Button className="bg-blue-600" title="Submit" />
               <Button
                 className="bg-red-600"
-                onClick={cancelHandler}
+                onClick={showTable ? closeModal : cancelHandler}
                 title="cancel"
               />
             </div>
@@ -127,30 +130,46 @@ function App() {
 
         {/*~~~~~~~~$ Table $~~~~~~~~*/}
         {showTable && (
-          <div className="md:flex items-center justify-center gap-2">
+          <div className="md:flex items-center justify-center gap-10">
             <Table
               inputData={convertToRankedObject(inputData)}
               tableHeads={["rank", "gain", "dg"]}
+              headStyling="bg-gray-900"
+              rowStyling="even:bg-gray-200"
             />
             <Table
               inputData={sortByGain(convertToRankedObject(inputData))}
-              tableHeads={["rank", "ranked gain", "dg"]}
+              tableHeads={["rank", "gain", "dg"]}
+              headStyling="bg-gradient-to-r from-purple-600 to-blue-600"
+              rowStyling="even:bg-blue-100"
             />
           </div>
         )}
-        <p className="bg-indigo-700 py-2 my-4 text-white text-2xl font-semibold capitalize tracking-wider">
-          rate is{" "}
-          {Math.round(
-            (getTotalNDCG(convertToRankedObject(inputData)) /
-              getTotalNDCG(sortByGain(convertToRankedObject(inputData)))) *
-              100
-          )}
-          %
-        </p>
 
-        {/*~~~~~~~~$ Reset Button $~~~~~~~~*/}
         {showTable && (
-          <Button className="bg-red-600" title="reset" onClick={resetHandler} />
+          <p className="bg-indigo-700 py-2 my-4 md:my-5 text-white text-2xl font-semibold capitalize tracking-wider">
+            rate is{" "}
+            {Math.round(
+              (getTotalNDCG(convertToRankedObject(inputData)) /
+                getTotalNDCG(
+                  sortByGainMaintainRank(convertToRankedObject(inputData))
+                )) *
+                100
+            )}
+            %
+          </p>
+        )}
+
+        {/*~~~~~~~~$ Reset & Edit Buttons $~~~~~~~~*/}
+        {showTable && (
+          <div className="flex space-x-4 md:space-x-5">
+            <Button title="edit" className="bg-green-600" onClick={openModal} />
+            <Button
+              className="bg-red-600"
+              title="reset"
+              onClick={resetHandler}
+            />
+          </div>
         )}
       </main>
     </Fragment>

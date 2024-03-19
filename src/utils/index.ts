@@ -7,6 +7,18 @@ export function convertToRankedObject(gain: {
     rank: index + 1,
   }));
 }
+const input = [
+  { gain: 3, rank: 1 },
+  { gain: 4, rank: 2 },
+  { gain: 5, rank: 3 },
+  { gain: 6, rank: 4 },
+  { gain: 7, rank: 5 },
+  { gain: 7, rank: 6 },
+  { gain: 7, rank: 7 },
+  { gain: 8, rank: 8 },
+  { gain: 4, rank: 9 },
+  { gain: 5, rank: 10 },
+];
 
 export function sortByGain(
   input: { gain: number; rank: number }[]
@@ -21,13 +33,16 @@ export function sortByGain(
   });
 }
 
-// export function reRank(
-//   input: { gain: number; rank: number }[]
-// ): { gain: number; rank: number }[] {
-//   const newRanked = sortByGain(input).map((item, index) => item.rank = (index + 1));
+export function sortByGainMaintainRank(data: { gain: number, rank: number }[]): { gain: number, rank: number }[] {
+  return data.sort((a, b) => {
+    // Sort by gain in descending order
+    return b.gain - a.gain;
+  }).map((item, index) => {
+    // Assign original rank back after sorting
+    return { ...item, rank: index + 1 };
+  });
+}
 
-//   return newRanked;
-// }
 
 export function getNdcg(gain: number, rank: number): number {
   if (Math.log(rank) !== 0) {
@@ -46,3 +61,5 @@ export function getTotalNDCG(input: { gain: number; rank: number }[]): number {
 
   return totalNdcg;
 }
+
+console.log(sortByGainMaintainRank(input));

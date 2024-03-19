@@ -6,8 +6,10 @@ interface ITable extends TableHTMLAttributes<HTMLTableElement> {
   inputData: { gain: number; rank: number }[];
   caption?: string;
   tableHeads: string[];
+  headStyling?: string;
+  rowStyling?: string;
 }
-const Table = ({ inputData, caption, tableHeads }: ITable) => {
+const Table = ({ inputData, caption, tableHeads, headStyling, rowStyling }: ITable) => {
   // Calculate total ndcg
   const totalNdcg = inputData.reduce((acc, item, index) => {
     const ndcgValue = getNdcg(item.gain, index + 1); // Call getNdcg with the entire item
@@ -15,10 +17,10 @@ const Table = ({ inputData, caption, tableHeads }: ITable) => {
   }, 0);
 
   return (
-    <table className="w-full mt-16 bg-white shadow-lg rounded-lg">
+    <table className={`w-full mt-16 bg-white shadow-lg rounded-lg border-2`}>
       {caption && <caption className="caption-top">{caption}</caption>}
       <thead>
-        <tr className="bg-gradient-to-r from-purple-600 to-blue-600">
+        <tr className={`${headStyling}`}>
           <th className="py-4 px-6 text-white font-bold uppercase">
             {tableHeads[0]}
           </th>
@@ -34,10 +36,7 @@ const Table = ({ inputData, caption, tableHeads }: ITable) => {
       <tbody>
         {inputData.map((item, index) => {
           return (
-            <tr
-              key={index + 1}
-              className="even:bg-blue-100 text-lg font-semibold"
-            >
+            <tr key={index + 1} className={`${rowStyling} text-lg font-semibold`}>
               <td
                 className={`py-3 px-6 text-center text-blue-900 font-medium"`}
               >
