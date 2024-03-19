@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from "react";
+import { Helmet } from "react-helmet";
 import "./App.css";
 import Button from "./ui/Button";
 import InputsModal from "./ui/InputsModal";
@@ -91,6 +92,16 @@ function App() {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>NDCG</title>
+        <meta
+          name="description"
+          content="relevance mesuration algorithm"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="../public/favicon.svg" />
+      </Helmet>
+
       <main className="px-5 lg:px-12 xl:px-24">
         {/*~~~~~~~~$ Get Start $~~~~~~~~*/}
         <div>

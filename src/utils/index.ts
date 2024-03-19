@@ -7,18 +7,6 @@ export function convertToRankedObject(gain: {
     rank: index + 1,
   }));
 }
-const input = [
-  { gain: 3, rank: 1 },
-  { gain: 4, rank: 2 },
-  { gain: 5, rank: 3 },
-  { gain: 6, rank: 4 },
-  { gain: 7, rank: 5 },
-  { gain: 7, rank: 6 },
-  { gain: 7, rank: 7 },
-  { gain: 8, rank: 8 },
-  { gain: 4, rank: 9 },
-  { gain: 5, rank: 10 },
-];
 
 export function sortByGain(
   input: { gain: number; rank: number }[]
@@ -61,5 +49,3 @@ export function getTotalNDCG(input: { gain: number; rank: number }[]): number {
 
   return totalNdcg;
 }
-
-console.log(sortByGainMaintainRank(input));
