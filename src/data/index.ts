@@ -88,6 +88,7 @@ export const defaultFromInputs: { [key: string]: string } = {
 };
 
 export const gainColors = [
+  "bg-red-500",
   "bg-green-100",
   "bg-green-200",
   "bg-green-300",
@@ -97,5 +98,4 @@ export const gainColors = [
   "bg-green-700",
   "bg-green-800",
   "bg-green-900",
-  "bg-green-950", // Handle the 10th element case
 ];

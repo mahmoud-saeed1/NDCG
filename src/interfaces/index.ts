@@ -14,3 +14,7 @@ export interface IFromInputs {
   label: string;
   rank: number;
 }
+
+export interface IInputData {
+  inputData: { [key: string]: string };
+}

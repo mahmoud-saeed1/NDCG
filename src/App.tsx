@@ -2,21 +2,24 @@ import { ChangeEvent, FormEvent, Fragment, useState } from "react";
 import "./App.css";
 import Button from "./ui/Button";
 import InputsModal from "./ui/InputsModal";
-import { FromInputs, defaultFromInputs, gainColors } from "./data";
+import { FromInputs, defaultFromInputs } from "./data";
 import Input from "./ui/Input";
 import { InputValidator } from "./validation";
 import ErrorMessage from "./components/ErrorMessage";
 import Table from "./ui/Table";
+import { convertToRankedObject, getTotalNDCG, sortByGain } from "./utils";
 
 function App() {
   /*~~~~~~~~$ States $~~~~~~~~*/
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [inputData, setInputData] = useState(defaultFromInputs);
   const [errors, setErrors] = useState(defaultFromInputs);
+  const [showTable, setShowTable] = useState(false);
 
   /*~~~~~~~~$ Handlers $~~~~~~~~*/
   const openModal = () => setIsOpenModal(true);
   const closeModal = () => setIsOpenModal(false);
+  const viewTable = () => setShowTable(true);
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
@@ -42,8 +45,11 @@ function App() {
       return;
     }
 
+    // ? show table
+    viewTable();
+
     // ? clear inputs fields
-    setInputData(defaultFromInputs);
+    // setInputData(defaultFromInputs);
 
     // ? close modal
     closeModal();
@@ -95,50 +101,18 @@ function App() {
           </form>
         </InputsModal>
 
-        {/*~~~~~~~~$ c $~~~~~~~~*/}
-        <table className="bg-white w-full mt-16  shadow-lg rounded-lg">
-          <thead>
-            <tr className="bg-gradient-to-r from-purple-600 to-blue-600">
-              <th className="py-4 px-6 text-white font-bold uppercase">Rank</th>
-              <th className="py-4 px-6 text-white font-bold uppercase">
-                Gains
-              </th>
-              <th className="py-4 px-6 text-white font-bold uppercase">NDCG</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.values(inputData).map((value, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-blue-100" : ""
-                } text-lg font-semibold`}
-              >
-                <td
-                  className={`${
-                    index !== 0
-                      ? gainColors[index % gainColors.length]
-                      : "bg-red-500"
-                  } py-3 px-6 text-center text-white font-medium"`}
-                >
-                  {index + 1}
-                </td>
-                <td
-                  className={`py-3 px-6 text-center text-blue-900 font-medium"`}
-                >
-                  {Number(value)}
-                </td>
-                <td
-                  className={`py-3 px-6 text-center text-blue-900 font-medium"`}
-                >
-                  {index + 1}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <Table inputData={inputData}/>
+        {/*~~~~~~~~$ Table $~~~~~~~~*/}
+        {showTable && (
+          <div>
+            <Table inputData={convertToRankedObject(inputData)} />
+            <Table inputData={sortByGain(convertToRankedObject(inputData))} />
+            <h1>
+              rate is{" "}
+              {getTotalNDCG(sortByGain(convertToRankedObject(inputData))) /
+                getTotalNDCG(convertToRankedObject(inputData))}
+            </h1>
+          </div>
+        )}
       </main>
     </Fragment>
   );
