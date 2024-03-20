@@ -99,7 +99,7 @@ function App() {
           content="relevance mesuration algorithm"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="../public/favicon.svg" />
+        <link rel="icon" href="../public/favicon.webp" />
       </Helmet>
 
       <main className="px-5 lg:px-12 xl:px-24">
